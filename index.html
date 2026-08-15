@@ -4,10 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Portofolio Aldo | Warehouse & IT Specialist</title>
-  <!-- FAVICON SVG - Logo kustom dengan warna neon -->
+  <!-- FAVICON SVG -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030308'/><circle cx='50' cy='30' r='15' fill='%2300f0ff' opacity='0.9'/><path d='M20,90 Q25,60 35,55 L50,65 L65,55 Q75,60 80,90 Z' fill='%23b44dff'/><polygon points='50,65 45,55 50,45 55,55' fill='%23ff2d95'/><path d='M35,55 L40,70 L50,80 L60,70 L65,55' fill='%23b44dff' stroke='%2300f0ff' stroke-width='1.5'/></svg>">
+  
+  <!-- FONT AWESOME -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- AOS - Animate On Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  
+  <!-- SWIPER JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  
+  <!-- SWEETALERT2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
   <style>
     :root {
       --neon-purple: #b44dff;
@@ -38,7 +52,218 @@
     }
 
     /* ============================================
-       LIQUID NAVIGATION - EFEK CAIR SUPER KEREN
+       WELCOME SCREEN / PRELOADER
+       ============================================ */
+    .welcome-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #030308;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .welcome-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .welcome-photo-wrapper {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      animation: welcomePhotoFloat 2s infinite ease-in-out;
+    }
+
+    @media (min-width: 640px) {
+      .welcome-photo-wrapper { width: 200px; height: 200px; }
+    }
+
+    @keyframes welcomePhotoFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-15px) scale(1.05); }
+    }
+
+    .welcome-photo-ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+      z-index: -1;
+      filter: blur(15px);
+      opacity: 0.7;
+      animation: welcomeRingGlow 2s infinite alternate;
+    }
+
+    @keyframes welcomeRingGlow {
+      0% { opacity: 0.5; filter: blur(10px); }
+      100% { opacity: 1; filter: blur(20px); }
+    }
+
+    .welcome-photo-frame {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid rgba(255,255,255,0.3);
+      box-shadow: 0 0 40px rgba(180, 77, 255, 0.5);
+      background: rgba(20, 15, 40, 0.5);
+    }
+
+    .welcome-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .welcome-ring {
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .welcome-ring::before,
+    .welcome-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--neon-cyan);
+      animation: welcomeRingPulse 2s infinite ease-out;
+    }
+
+    .welcome-ring::after {
+      border-color: var(--neon-purple);
+      animation-delay: 0.5s;
+    }
+
+    @keyframes welcomeRingPulse {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .welcome-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: welcomeGlow 2s infinite alternate;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .welcome-logo { font-size: 2.5rem; }
+    }
+
+    @keyframes welcomeGlow {
+      0% { filter: drop-shadow(0 0 10px rgba(0,240,255,0.5)); }
+      100% { filter: drop-shadow(0 0 30px rgba(180,77,255,0.8)); }
+    }
+
+    .welcome-text {
+      color: #9893b8;
+      font-size: 0.8rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: welcomeFadeInOut 2s infinite;
+    }
+
+    @keyframes welcomeFadeInOut {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .welcome-loading-bar {
+      width: 250px;
+      height: 3px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (min-width: 640px) {
+      .welcome-loading-bar { width: 300px; }
+    }
+
+    .welcome-loading-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+      border-radius: 10px;
+      animation: loadingProgress 2.5s ease-in-out forwards;
+      box-shadow: 0 0 20px rgba(0,240,255,0.5);
+    }
+
+    @keyframes loadingProgress {
+      0% { width: 0%; }
+      50% { width: 60%; }
+      100% { width: 100%; }
+    }
+
+    .welcome-percentage {
+      color: var(--neon-cyan);
+      font-family: 'Space Grotesk', monospace;
+      font-size: 0.8rem;
+      margin-top: 0.8rem;
+      animation: welcomeFadeInOut 1s infinite;
+    }
+
+    .welcome-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .welcome-particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: particleFloat 3s infinite ease-in-out;
+      opacity: 0;
+    }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      20% { opacity: 0.8; }
+      80% { opacity: 0.5; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    /* ============================================
+       MAIN CONTENT
+       ============================================ */
+    .main-content {
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .main-content.visible {
+      opacity: 1;
+    }
+
+    /* ============================================
+       LIQUID NAVIGATION
        ============================================ */
     .navbar {
       display: flex;
@@ -67,33 +292,6 @@
       overflow: visible;
     }
 
-    .liquid-bubbles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: visible;
-      z-index: 0;
-    }
-
-    .bubble {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(0,240,255,0.3));
-      animation: bubbleFloat 2.5s infinite ease-in-out;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    @keyframes bubbleFloat {
-      0% { transform: translateY(0) scale(0.3); opacity: 0; }
-      30% { opacity: 0.9; }
-      70% { opacity: 0.6; }
-      100% { transform: translateY(-25px) scale(1.1); opacity: 0; }
-    }
-
     .liquid-nav-item {
       position: relative;
       text-decoration: none;
@@ -115,25 +313,6 @@
       white-space: nowrap;
     }
 
-    .liquid-nav-item::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,240,255,0.35), rgba(180,77,255,0.35));
-      transform: translate(-50%, -50%);
-      transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1), height 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-      z-index: -1;
-    }
-
-    .liquid-nav-item:hover::before {
-      width: 250px;
-      height: 250px;
-    }
-
     .liquid-nav-item:hover {
       color: #fff;
       text-shadow: 0 0 20px rgba(0,240,255,0.7);
@@ -146,37 +325,6 @@
       border: 1px solid rgba(0,240,255,0.3);
     }
 
-    .liquid-nav-item.active::after {
-      content: '';
-      position: absolute;
-      bottom: 3px;
-      left: 25%;
-      width: 50%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-purple), transparent);
-      border-radius: 2px;
-      animation: liquidUnderline 2s infinite;
-    }
-
-    @keyframes liquidUnderline {
-      0% { transform: scaleX(0.3); opacity: 0.3; }
-      50% { transform: scaleX(1); opacity: 1; }
-      100% { transform: scaleX(0.3); opacity: 0.3; }
-    }
-
-    .liquid-nav-item .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      transform: scale(0);
-      animation: rippleEffect 0.5s linear;
-      pointer-events: none;
-    }
-
-    @keyframes rippleEffect {
-      to { transform: scale(3); opacity: 0; }
-    }
-
     .liquid-nav-item.cta {
       background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
       color: #fff !important;
@@ -185,37 +333,10 @@
       border: none;
     }
 
-    .liquid-nav-item.cta:hover {
-      box-shadow: 0 10px 35px rgba(255, 45, 149, 0.65);
-      transform: translateY(-2px);
-    }
-
     @media (max-width: 768px) {
-      .liquid-nav {
-        flex-wrap: wrap;
-        border-radius: 30px;
-        padding: 0.4rem;
-        gap: 0.2rem;
-      }
-      .liquid-nav-item {
-        font-size: 0.75rem;
-        padding: 0.5rem 0.7rem;
-      }
-      .liquid-nav-item .nav-text {
-        display: none;
-      }
-      .liquid-nav-item i {
-        font-size: 1rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .liquid-nav-item {
-        padding: 0.5rem 0.5rem;
-      }
-      .liquid-nav-item i {
-        font-size: 0.85rem;
-      }
+      .liquid-nav { flex-wrap: wrap; border-radius: 30px; padding: 0.4rem; gap: 0.2rem; }
+      .liquid-nav-item { font-size: 0.75rem; padding: 0.5rem 0.7rem; }
+      .liquid-nav-item .nav-text { display: none; }
     }
 
     /* CUSTOM CURSOR */
@@ -252,7 +373,7 @@
       }
     }
 
-    /* ANIMATED BACKGROUND */
+    /* BACKGROUND */
     .bg-ai {
       position: fixed;
       top: 0;
@@ -262,13 +383,8 @@
       z-index: -2;
       background: var(--dark-bg);
     }
-    .bg-ai canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+    .bg-ai canvas { position: absolute; top: 0; left: 0; }
 
-    /* FLOATING ORBS */
     .orb {
       position: fixed;
       border-radius: 50%;
@@ -295,11 +411,9 @@
       position: relative;
       z-index: 2;
     }
-    @media (min-width: 640px) {
-      .container { padding: 0 2rem; }
-    }
+    @media (min-width: 640px) { .container { padding: 0 2rem; } }
 
-    /* HERO SECTION */
+    /* HERO */
     .hero {
       display: grid;
       grid-template-columns: 1fr;
@@ -310,12 +424,7 @@
       text-align: center;
     }
     @media (min-width: 768px) {
-      .hero {
-        grid-template-columns: 1fr 1fr;
-        gap: 3rem;
-        min-height: 80vh;
-        text-align: left;
-      }
+      .hero { grid-template-columns: 1fr 1fr; gap: 3rem; min-height: 80vh; text-align: left; }
     }
     .hero-content { position: relative; z-index: 1; order: 1; }
     .hero-visual { order: 2; display: flex; justify-content: center; align-items: center; perspective: 1000px; }
@@ -405,13 +514,8 @@
       color: #fff;
       box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
     }
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--neon-pink);
-      color: var(--neon-pink);
-    }
 
-    /* FOTO PROFILE */
+    /* PHOTO */
     .photo-wrapper {
       position: relative;
       width: 220px;
@@ -652,27 +756,6 @@
       mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
     }
 
-    /* CONTACT LINKS */
-    .contact-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem; }
-    .contact-link {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.4rem 0.9rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 30px;
-      color: #c5bfd6;
-      text-decoration: none;
-      font-size: 0.7rem;
-      transition: all 0.3s;
-    }
-    .contact-link:hover {
-      border-color: var(--neon-cyan);
-      color: #fff;
-      background: rgba(0,240,255,0.1);
-    }
-
     /* CONTACT FORM */
     .contact-form input,
     .contact-form textarea,
@@ -699,13 +782,28 @@
     .contact-form textarea::placeholder {
       color: #6b6580;
     }
-    .contact-form select {
-      appearance: none;
-      cursor: pointer;
+    .contact-form select { appearance: none; cursor: pointer; }
+    .contact-form select option { background: #1a1525; color: #fff; }
+
+    /* CONTACT LINKS */
+    .contact-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 30px;
+      color: #c5bfd6;
+      text-decoration: none;
+      font-size: 0.7rem;
+      transition: all 0.3s;
     }
-    .contact-form select option {
-      background: #1a1525;
+    .contact-link:hover {
+      border-color: var(--neon-cyan);
       color: #fff;
+      background: rgba(0,240,255,0.1);
     }
 
     /* ABOUT PHOTO */
@@ -715,7 +813,6 @@
       height: 180px;
       margin: 0 auto 1rem;
     }
-    @media (min-width: 640px) { .about-photo-wrapper { width: 180px; height: 220px; } }
     .about-photo-frame {
       width: 100%;
       height: 100%;
@@ -731,24 +828,38 @@
       object-position: center top;
     }
 
-    /* NOTIFICATION */
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 1rem 1.5rem;
-      border-radius: 15px;
-      background: rgba(37, 211, 102, 0.9);
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.9rem;
-      z-index: 9999;
-      transform: translateX(120%);
-      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    /* SWIPER TESTIMONIALS */
+    .swiper {
+      padding: 1rem 0 3rem 0;
     }
-    .notification.show {
-      transform: translateX(0);
+    .swiper-slide {
+      display: flex;
+      align-items: stretch;
+    }
+    .swiper-slide .holo-card {
+      width: 100%;
+    }
+    .swiper-pagination-bullet {
+      background: var(--neon-cyan);
+      opacity: 0.3;
+    }
+    .swiper-pagination-bullet-active {
+      background: var(--neon-purple);
+      opacity: 1;
+      box-shadow: 0 0 15px rgba(180,77,255,0.6);
+    }
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: var(--neon-cyan);
+      background: rgba(15,12,30,0.7);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+      font-size: 1.2rem;
     }
 
     footer {
@@ -763,355 +874,342 @@
   </style>
 </head>
 <body>
-  <div class="cursor"></div>
-  <div class="cursor-dot"></div>
-  <div class="notification" id="notification">✅ Membuka WhatsApp...</div>
-
-  <div class="bg-ai"><canvas id="particleCanvas"></canvas></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-
-  <div class="container">
-    <!-- LIQUID NAVIGATION -->
-    <nav class="navbar">
-      <div class="liquid-nav" id="liquidNav">
-        <div class="liquid-bubbles" id="liquidBubbles"></div>
-        
-        <a href="#home" class="liquid-nav-item active" data-nav="home">
-          <i class="fas fa-home"></i>
-          <span class="nav-text">Home</span>
-        </a>
-        <a href="#about" class="liquid-nav-item" data-nav="about">
-          <i class="fas fa-user-astronaut"></i>
-          <span class="nav-text">About</span>
-        </a>
-        <a href="#experience" class="liquid-nav-item" data-nav="experience">
-          <i class="fas fa-timeline"></i>
-          <span class="nav-text">Timeline</span>
-        </a>
-        <a href="#projects" class="liquid-nav-item" data-nav="projects">
-          <i class="fas fa-project-diagram"></i>
-          <span class="nav-text">Projects</span>
-        </a>
-        <a href="#skills" class="liquid-nav-item" data-nav="skills">
-          <i class="fas fa-microchip"></i>
-          <span class="nav-text">Skills</span>
-        </a>
-        <a href="#testimonials" class="liquid-nav-item" data-nav="testimonials">
-          <i class="fas fa-quote-right"></i>
-          <span class="nav-text">Testimoni</span>
-        </a>
-        <a href="#contact" class="liquid-nav-item" data-nav="contact">
-          <i class="fas fa-envelope"></i>
-          <span class="nav-text">Kontak</span>
-        </a>
-        <a href="#download" class="liquid-nav-item cta" data-nav="download">
-          <i class="fas fa-cloud-download-alt"></i>
-          <span class="nav-text">CV</span>
-        </a>
+  <!-- WELCOME SCREEN -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="welcome-particles" id="welcomeParticles"></div>
+    <div class="welcome-photo-wrapper">
+      <div class="welcome-photo-ring"></div>
+      <div class="welcome-ring"></div>
+      <div class="welcome-photo-frame">
+        <img src="img/v1.png" alt="Foto Profil Aldo">
       </div>
-    </nav>
-
-    <!-- HERO -->
-    <section id="home" class="hero">
-      <div class="hero-content">
-        <div class="hero-badge"><i class="fas fa-robot"></i> AI-Enhanced Operations</div>
-        <h1>Intelligent <span class="grad">Warehouse</span> Systems</h1>
-        <p>Profesional dengan 6+ tahun pengalaman dalam manajemen pergudangan, quality control, dan otomatisasi proses. <span class="typing-text" id="typing"></span></p>
-        <div class="btn-group">
-          <a href="#about" class="btn btn-primary"><i class="fas fa-user-circle"></i> Tentang Saya</a>
-          <a href="#contact" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="photo-wrapper" id="photoWrapper">
-          <div class="photo-glow"></div>
-          <div class="photo-frame" id="heroPhotoFrame">
-            <img src="img/v1.png" alt="Foto Profesional">
-          </div>
-          <div class="photo-status"><span class="dot"></span> Available</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="section">
-      <p class="section-label">// Profile</p>
-      <h2 class="section-title">About <span>Me</span></h2>
-      <div class="grid-2">
-        <div class="holo-card">
-          <div class="icon-box icon-cyan"><i class="fas fa-id-card"></i></div>
-          <h3 style="color:#fff; margin-bottom:1.2rem; font-size:1.1rem;">Data Diri</h3>
-          <table class="data-diri-table">
-            <tr><td><i class="fas fa-user"></i> Nama</td><td>: Aldo Giyantoro Putra</td></tr>
-            <tr><td><i class="fas fa-calendar-alt"></i> Tgl Lahir</td><td>: Tangerang, 14 April 2001</td></tr>
-            <tr><td><i class="fas fa-venus-mars"></i> Gender</td><td>: Laki-laki</td></tr>
-            <tr><td><i class="fas fa-flag"></i> Warga Negara</td><td>: Indonesia</td></tr>
-            <tr><td><i class="fas fa-ring"></i> Status</td><td>: Menikah</td></tr>
-            <tr><td><i class="fas fa-map-marker-alt"></i> Alamat</td><td>: Legok, Tangerang, Banten 15820</td></tr>
-            <tr><td><i class="fas fa-envelope"></i> Email</td><td>: aldogiyantoro28@gmail.com</td></tr>
-            <tr><td><i class="fas fa-phone"></i> Telepon</td><td>: +62 896-7778-6762</td></tr>
-          </table>
-          <div class="contact-links">
-            <a href="https://www.linkedin.com/in/aldogiyantoroputra" class="contact-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            <a href="#" class="contact-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
-            <a href="https://wa.me/6289677786762" class="contact-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-          </div>
-        </div>
-        <div>
-          <div class="holo-card" style="text-align:center; margin-bottom:1.5rem;">
-            <div class="about-photo-wrapper">
-              <div class="about-photo-frame" id="aboutPhotoFrame">
-                <img src="img/v2.png" alt="Foto Profesional">
-              </div>
-            </div>
-            <div class="icon-box icon-purple" style="margin:0 auto 1rem;"><i class="fas fa-user-circle"></i></div>
-            <h3 style="color:#fff; margin-bottom:0.8rem;">Ringkasan Pribadi</h3>
-            <p style="color:#9893b8; font-size:0.85rem;">Warehouse Supervisor & Quality Control Professional dengan pengalaman lebih dari 6 tahun di bidang manajemen pergudangan, operasional logistik, dan penjaminan kualitas.</p>
-          </div>
-          <div class="holo-card">
-            <div class="icon-box icon-green"><i class="fas fa-graduation-cap"></i></div>
-            <h3 style="color:#fff; margin-bottom:1rem;">Pendidikan & Sertifikasi</h3>
-            <ul style="list-style:none; color:#9893b8; display:flex; flex-direction:column; gap:0.4rem; font-size:0.8rem;">
-              <li><i class="fas fa-check-circle" style="color:var(--neon-green);"></i> Software Engineering · SMKN 12 Kab. Tangerang</li>
-              <li><i class="fas fa-check-circle" style="color:var(--neon-green);"></i> Sarjana Sistem Informasi · Universitas Pamulang</li>
-              <li><i class="fas fa-shield-alt" style="color:var(--neon-cyan);"></i> Anzen Leader Safety Training · PT AHM</li>
-              <li><i class="fas fa-chart-pie" style="color:var(--neon-cyan);"></i> Data Analytics Certificate · Dicoding</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="grid-4" style="margin-top:1.5rem;">
-        <div class="holo-card" style="text-align:center;"><div class="stat-counter" data-target="6">0</div><p style="color:#9893b8; font-size:0.75rem;">Tahun</p></div>
-        <div class="holo-card" style="text-align:center;"><div class="stat-counter" data-target="3">0</div><p style="color:#9893b8; font-size:0.75rem;">Perusahaan</p></div>
-        <div class="holo-card" style="text-align:center;"><div class="stat-counter" data-target="15">0</div><p style="color:#9893b8; font-size:0.75rem;">Proyek</p></div>
-        <div class="holo-card" style="text-align:center;"><div class="stat-counter" data-target="2">0</div><p style="color:#9893b8; font-size:0.75rem;">Sertifikasi</p></div>
-      </div>
-    </section>
-
-    <!-- EXPERIENCE -->
-    <section id="experience" class="section">
-      <p class="section-label">// Career Path</p>
-      <h2 class="section-title">Work <span>Timeline</span></h2>
-      <div class="timeline-glow">
-        <div class="tl-item"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Apr 2025 — Sekarang</p><h3 style="color:#fff; font-size:1rem;">Supervisor · Fullmoon Jaya Abadi</h3><p style="color:#9893b8; font-size:0.8rem;">Memimpin operasional gudang harian, akurasi stok, kepatuhan safety.</p></div>
-        <div class="tl-item"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Jul 2024 — Apr 2025</p><h3 style="color:#fff; font-size:1rem;">Quality Controller & Staff Admin · Fullmoon Jaya Abadi</h3><p style="color:#9893b8; font-size:0.8rem;">Inspeksi kualitas B2B, laporan QC, penanganan barang reject.</p></div>
-        <div class="tl-item"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Agt 2023 — Jul 2024</p><h3 style="color:#fff; font-size:1rem;">Admin Staff & Quality Control · Kimbratas</h3><p style="color:#9893b8; font-size:0.8rem;">Kepala QC, standar K3, input data produksi harian.</p></div>
-        <div class="tl-item"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Okt 2019 — Agt 2023</p><h3 style="color:#fff; font-size:1rem;">HR & GA Staff · Kimbratas</h3><p style="color:#9893b8; font-size:0.8rem;">Administrasi SDM, pelatihan, backup QC.</p></div>
-        <div class="tl-item"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Jan 2018 — Jan 2019</p><h3 style="color:#fff; font-size:1rem;">Warehouse Staff · PT Nikko Cahya Electric</h3><p style="color:#9893b8; font-size:0.8rem;">Penerimaan/pengeluaran barang, inventory tracking.</p></div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="section">
-      <p class="section-label">// Projects</p>
-      <h2 class="section-title">Featured <span>Projects</span></h2>
-      <div class="grid-3">
-        <div class="holo-card">
-          <div class="icon-box icon-cyan"><i class="fas fa-robot"></i></div>
-          <h3 style="color:#fff; margin-bottom:0.8rem; font-size:1.1rem;">WMS Implementation</h3>
-          <p style="color:#9893b8; font-size:0.85rem;">Implementasi sistem manajemen gudang dengan akurasi 99.8% dan pengurangan waktu proses 40%.</p>
-          <div class="tag-wrap"><span class="tag">SAP EWM</span><span class="tag">Automation</span><span class="tag">RFID</span></div>
-        </div>
-        <div class="holo-card">
-          <div class="icon-box icon-purple"><i class="fas fa-chart-line"></i></div>
-          <h3 style="color:#fff; margin-bottom:0.8rem; font-size:1.1rem;">Inventory Optimization</h3>
-          <p style="color:#9893b8; font-size:0.85rem;">Mengurangi selisih stok dari 5% menjadi 0.2% melalui sistem real-time monitoring.</p>
-          <div class="tag-wrap"><span class="tag">Data Analytics</span><span class="tag">Power BI</span><span class="tag">SQL</span></div>
-        </div>
-        <div class="holo-card">
-          <div class="icon-box icon-pink"><i class="fas fa-truck"></i></div>
-          <h3 style="color:#fff; margin-bottom:0.8rem; font-size:1.1rem;">Logistics Automation</h3>
-          <p style="color:#9893b8; font-size:0.85rem;">Otomatisasi proses inbound/outbound menghemat 70% waktu dan mengurangi kesalahan.</p>
-          <div class="tag-wrap"><span class="tag">RPA</span><span class="tag">IoT</span><span class="tag">API</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills" class="section">
-      <p class="section-label">// Core Competencies</p>
-      <h2 class="section-title">Technical <span>Skills</span></h2>
-      <div class="grid-3">
-        <div class="holo-card"><div class="icon-box icon-green"><i class="fas fa-warehouse"></i></div><h3 style="color:#fff; margin-bottom:0.8rem; font-size:1rem;">Warehouse & Logistik</h3><div class="tag-wrap"><span class="tag">Manajemen Gudang</span><span class="tag">Inventory Disposal</span><span class="tag">Administrasi Gudang</span><span class="tag">Pengawasan Logistik</span><span class="tag">Supply Chain</span></div></div>
-        <div class="holo-card"><div class="icon-box icon-cyan"><i class="fas fa-laptop-code"></i></div><h3 style="color:#fff; margin-bottom:0.8rem; font-size:1rem;">Teknis & IT</h3><div class="tag-wrap"><span class="tag">Microsoft Excel</span><span class="tag">PowerPoint</span><span class="tag">Data Analytics</span><span class="tag">Web Developer</span><span class="tag">Teknis Data</span></div></div>
-        <div class="holo-card"><div class="icon-box icon-pink"><i class="fas fa-users-cog"></i></div><h3 style="color:#fff; margin-bottom:0.8rem; font-size:1rem;">Manajerial & QC</h3><div class="tag-wrap"><span class="tag">Kepemimpinan</span><span class="tag">Sistem SDM</span><span class="tag">Quality Control</span><span class="tag">K3 / Safety</span><span class="tag">Support Services</span></div></div>
-      </div>
-      <div class="progress-ring-wrap" style="margin-top:2rem;">
-        <div class="progress-ring-item"><div class="ring" style="--ring-color:var(--neon-cyan); --pct:95%;"><span style="font-weight:700; color:#fff; font-size:0.8rem;">95%</span></div><p style="color:#9893b8; font-size:0.75rem;">WMS</p></div>
-        <div class="progress-ring-item"><div class="ring" style="--ring-color:var(--neon-purple); --pct:90%;"><span style="font-weight:700; color:#fff; font-size:0.8rem;">90%</span></div><p style="color:#9893b8; font-size:0.75rem;">QC</p></div>
-        <div class="progress-ring-item"><div class="ring" style="--ring-color:var(--neon-pink); --pct:88%;"><span style="font-weight:700; color:#fff; font-size:0.8rem;">88%</span></div><p style="color:#9893b8; font-size:0.75rem;">Logistik</p></div>
-        <div class="progress-ring-item"><div class="ring" style="--ring-color:var(--neon-green); --pct:85%;"><span style="font-weight:700; color:#fff; font-size:0.8rem;">85%</span></div><p style="color:#9893b8; font-size:0.75rem;">Data</p></div>
-      </div>
-    </section>
-
-    <!-- TOOLS -->
-    <section id="tools" class="section">
-      <p class="section-label">// Tools</p>
-      <h2 class="section-title">Software <span>Mastery</span></h2>
-      <div class="grid-4">
-        <div class="holo-card" style="text-align:center;">
-          <i class="fas fa-table" style="font-size:2rem; color:#00ff88;"></i>
-          <p style="margin-top:0.5rem; font-weight:600;">Excel</p>
-          <p style="color:#9893b8; font-size:0.75rem;">Advanced</p>
-        </div>
-        <div class="holo-card" style="text-align:center;">
-          <i class="fas fa-chart-bar" style="font-size:2rem; color:#00f0ff;"></i>
-          <p style="margin-top:0.5rem; font-weight:600;">Power BI</p>
-          <p style="color:#9893b8; font-size:0.75rem;">Intermediate</p>
-        </div>
-        <div class="holo-card" style="text-align:center;">
-          <i class="fas fa-database" style="font-size:2rem; color:#b44dff;"></i>
-          <p style="margin-top:0.5rem; font-weight:600;">SQL</p>
-          <p style="color:#9893b8; font-size:0.75rem;">Intermediate</p>
-        </div>
-        <div class="holo-card" style="text-align:center;">
-          <i class="fas fa-warehouse" style="font-size:2rem; color:#ff2d95;"></i>
-          <p style="margin-top:0.5rem; font-weight:600;">SAP EWM - WMS</p>
-          <p style="color:#9893b8; font-size:0.75rem;">Advanced</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- LANGUAGES -->
-    <section id="languages" class="section">
-      <p class="section-label">// Languages</p>
-      <h2 class="section-title">Language <span>Skills</span></h2>
-      <div class="grid-3">
-        <div class="holo-card">
-          <div class="icon-box icon-cyan"><i class="fas fa-language"></i></div>
-          <h3 style="color:#fff; font-size:1rem;">Bahasa Indonesia</h3>
-          <p style="color:#9893b8; font-size:0.85rem;">Native / Penutur Asli</p>
-        </div>
-        <div class="holo-card">
-          <div class="icon-box icon-purple"><i class="fas fa-language"></i></div>
-          <h3 style="color:#fff; font-size:1rem;">English</h3>
-          <p style="color:#9893b8; font-size:0.85rem;">Professional Working Proficiency</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ACHIEVEMENTS -->
-    <section id="achievements" class="section">
-      <p class="section-label">// Achievements</p>
-      <h2 class="section-title">Awards & <span>Recognition</span></h2>
-      <div class="grid-2">
-        <div class="holo-card">
-          <div class="icon-box icon-yellow"><i class="fas fa-trophy"></i></div>
-          <h3 style="color:#fff; font-size:1rem;">Best Employee QC of The Year 2025</h3>
-          <p style="color:#9893b8; font-size:0.85rem;">Fullmoon Jaya Abadi</p>
-        </div>
-        <div class="holo-card">
-          <div class="icon-box icon-cyan"><i class="fas fa-medal"></i></div>
-          <h3 style="color:#fff; font-size:1rem;">Top Quality Controller 2021</h3>
-          <p style="color:#9893b8; font-size:0.85rem;">Kimbratas</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- TESTIMONIALS -->
-    <section id="testimonials" class="section">
-      <p class="section-label">// Testimonials</p>
-      <h2 class="section-title">What People <span>Say</span></h2>
-      <div class="grid-2">
-        <div class="holo-card">
-          <i class="fas fa-quote-left" style="color:var(--neon-cyan); font-size:2rem;"></i>
-          <p style="color:#9893b8; font-size:0.9rem; margin:1rem 0;">"Aldo adalah supervisor yang sangat detail dan bertanggung jawab. Dia berhasil meningkatkan akurasi stok kami dari 92% menjadi 99.8% dalam 3 bulan."</p>
-          <strong style="color:#fff;">-</strong>
-          <p style="color:#9893b8; font-size:0.8rem;">Operations Manager · Fullmoon Jaya Abadi</p>
-        </div>
-        <div class="holo-card">
-          <i class="fas fa-quote-left" style="color:var(--neon-purple); font-size:2rem;"></i>
-          <p style="color:#9893b8; font-size:0.9rem; margin:1rem 0;">"Kemampuan Aldo dalam mengelola tim dan system sangat fleksibel."</p>
-          <strong style="color:#fff;">-</strong>
-          <p style="color:#9893b8; font-size:0.8rem;">HR Manager · Kimbratas</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT - WHATSAPP FORM -->
-    <section id="contact" class="section">
-      <p class="section-label">// Contact</p>
-      <h2 class="section-title">Get In <span>Touch</span></h2>
-      <div class="holo-card" style="max-width:600px; margin:0 auto;">
-        <div class="icon-box icon-whatsapp" style="margin:0 auto 1rem;"><i class="fab fa-whatsapp"></i></div>
-        <h3 style="color:#fff; text-align:center; margin-bottom:0.5rem;">Kirim Pesan via WhatsApp</h3>
-        <p style="color:#9893b8; text-align:center; font-size:0.85rem; margin-bottom:1.5rem;">Isi form di bawah, pesan akan langsung terkirim ke WhatsApp saya.</p>
-        
-        <form class="contact-form" id="whatsappForm">
-          <input type="text" id="nama" placeholder="Nama Lengkap Anda" required>
-          <input type="text" id="perusahaan" placeholder="Perusahaan / Instansi (Opsional)">
-          <input type="email" id="email" placeholder="Email Anda" required>
-          <select id="subjek" required>
-            <option value="" disabled selected>Pilih Subjek</option>
-            <option value="Lowongan Kerja">Lowongan Kerja</option>
-            <option value="Konsultasi WMS">Konsultasi WMS</option>
-            <option value="Kerjasama Proyek">Kerjasama Proyek</option>
-            <option value="Training / Workshop">Training / Workshop</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-          <textarea id="pesan" placeholder="Tulis pesan Anda..." rows="4" required></textarea>
-          <button type="submit" class="btn btn-whatsapp" style="width:100%; justify-content:center; font-size:1rem;">
-            <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <!-- DOWNLOAD -->
-    <section id="download" class="section" style="text-align:center;">
-      <div class="holo-card" style="max-width:600px; margin:0 auto; padding:2rem;">
-        <i class="fas fa-cloud-download-alt" style="font-size:2.5rem; color:var(--neon-cyan); margin-bottom:1rem;"></i>
-        <h3 style="color:#fff; margin-bottom:0.8rem; font-family:'Space Grotesk',sans-serif; font-size:1.2rem;">Download Curriculum Vitae</h3>
-        <p style="color:#9893b8; margin-bottom:1.5rem; font-size:0.85rem;">CV profesional siap diunduh dalam format PDF dari Google Drive.</p>
-        <a href="https://drive.google.com/file/d/1BLqylNuaguArKiVQEg7rpTfZiFAR673B/view?usp=sharing" class="btn btn-primary" style="font-size:0.9rem; padding:0.8rem 2rem; text-decoration:none;" target="_blank" rel="noopener noreferrer" download>
-          <i class="fas fa-download"></i> Download CV (PDF)
-        </a>
-      </div>
-    </section>
-
-    <footer>
-      <p>©Powered by AL | <i class="fas fa-envelope"></i> aldogiyantoro28@gmail.com | <i class="fab fa-whatsapp"></i> +62 896-7778-6762</p>
-    </footer>
+    </div>
+    <div class="welcome-logo">ALDO<span style="color:var(--neon-cyan);"> GIYANTORO</span></div>
+    <div class="welcome-text">Selamat Datang di Portofolio Saya</div>
+    <div class="welcome-loading-bar">
+      <div class="welcome-loading-fill" id="loadingFill"></div>
+    </div>
+    <div class="welcome-percentage" id="welcomePercentage">0%</div>
   </div>
 
+  <!-- MAIN CONTENT -->
+  <div class="main-content" id="mainContent">
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    <div class="bg-ai"><canvas id="particleCanvas"></canvas></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="container">
+      <!-- LIQUID NAVIGATION -->
+      <nav class="navbar">
+        <div class="liquid-nav" id="liquidNav">
+          <a href="#home" class="liquid-nav-item active"><i class="fas fa-home"></i><span class="nav-text">Home</span></a>
+          <a href="#about" class="liquid-nav-item"><i class="fas fa-user-astronaut"></i><span class="nav-text">About</span></a>
+          <a href="#experience" class="liquid-nav-item"><i class="fas fa-timeline"></i><span class="nav-text">Timeline</span></a>
+          <a href="#projects" class="liquid-nav-item"><i class="fas fa-project-diagram"></i><span class="nav-text">Projects</span></a>
+          <a href="#skills" class="liquid-nav-item"><i class="fas fa-microchip"></i><span class="nav-text">Skills</span></a>
+          <a href="#testimonials" class="liquid-nav-item"><i class="fas fa-quote-right"></i><span class="nav-text">Testimoni</span></a>
+          <a href="#contact" class="liquid-nav-item"><i class="fas fa-envelope"></i><span class="nav-text">Kontak</span></a>
+          <a href="#download" class="liquid-nav-item cta"><i class="fas fa-cloud-download-alt"></i><span class="nav-text">CV</span></a>
+        </div>
+      </nav>
+
+      <!-- HERO -->
+      <section id="home" class="hero">
+        <div class="hero-content" data-aos="fade-right">
+          <div class="hero-badge"><i class="fas fa-robot"></i> AI-Enhanced Operations</div>
+          <h1>Intelligent <span class="grad">Warehouse</span> Systems</h1>
+          <p>Profesional dengan 6+ tahun pengalaman dalam manajemen pergudangan, quality control, dan otomatisasi proses. <span class="typing-text" id="typing"></span></p>
+          <div class="btn-group">
+            <a href="#about" class="btn btn-primary"><i class="fas fa-user-circle"></i> Tentang Saya</a>
+            <a href="#contact" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
+          </div>
+        </div>
+        <div class="hero-visual" data-aos="fade-left">
+          <div class="photo-wrapper" id="photoWrapper">
+            <div class="photo-glow"></div>
+            <div class="photo-frame">
+              <img src="img/v1.png" alt="Foto Profesional">
+            </div>
+            <div class="photo-status"><span class="dot"></span> Available</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="section">
+        <p class="section-label" data-aos="fade-up">// Profile</p>
+        <h2 class="section-title" data-aos="fade-up">About <span>Me</span></h2>
+        <div class="grid-2">
+          <div class="holo-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="icon-box icon-cyan"><i class="fas fa-id-card"></i></div>
+            <h3 style="color:#fff; margin-bottom:1.2rem; font-size:1.1rem;">Data Diri</h3>
+            <table class="data-diri-table">
+              <tr><td><i class="fas fa-user"></i> Nama</td><td>: Aldo Giyantoro Putra</td></tr>
+              <tr><td><i class="fas fa-calendar-alt"></i> Tgl Lahir</td><td>: Tangerang, 14 April 2001</td></tr>
+              <tr><td><i class="fas fa-venus-mars"></i> Gender</td><td>: Laki-laki</td></tr>
+              <tr><td><i class="fas fa-flag"></i> Warga Negara</td><td>: Indonesia</td></tr>
+              <tr><td><i class="fas fa-ring"></i> Status</td><td>: Menikah</td></tr>
+              <tr><td><i class="fas fa-map-marker-alt"></i> Alamat</td><td>: Legok, Tangerang, Banten 15820</td></tr>
+              <tr><td><i class="fas fa-envelope"></i> Email</td><td>: aldogiyantoro28@gmail.com</td></tr>
+              <tr><td><i class="fas fa-phone"></i> Telepon</td><td>: +62 896-7778-6762</td></tr>
+            </table>
+            <div class="contact-links">
+              <a href="https://www.linkedin.com/in/aldogiyantoroputra" class="contact-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i> LinkedIn</a>
+              <a href="#" class="contact-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
+              <a href="https://wa.me/6289677786762" class="contact-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            </div>
+          </div>
+          <div>
+            <div class="holo-card" data-aos="fade-up" data-aos-delay="200" style="text-align:center; margin-bottom:1.5rem;">
+              <div class="about-photo-wrapper">
+                <div class="about-photo-frame">
+                  <img src="img/v2.png" alt="Foto Profesional">
+                </div>
+              </div>
+              <div class="icon-box icon-purple" style="margin:0 auto 1rem;"><i class="fas fa-user-circle"></i></div>
+              <h3 style="color:#fff; margin-bottom:0.8rem;">Ringkasan Pribadi</h3>
+              <p style="color:#9893b8; font-size:0.85rem;">Warehouse Supervisor & Quality Control Professional dengan pengalaman lebih dari 6 tahun di bidang manajemen pergudangan, operasional logistik, dan penjaminan kualitas.</p>
+            </div>
+            <div class="holo-card" data-aos="fade-up" data-aos-delay="300">
+              <div class="icon-box icon-green"><i class="fas fa-graduation-cap"></i></div>
+              <h3 style="color:#fff; margin-bottom:1rem;">Pendidikan & Sertifikasi</h3>
+              <ul style="list-style:none; color:#9893b8; display:flex; flex-direction:column; gap:0.4rem; font-size:0.8rem;">
+                <li><i class="fas fa-check-circle" style="color:var(--neon-green);"></i> Software Engineering · SMKN 12 Kab. Tangerang</li>
+                <li><i class="fas fa-check-circle" style="color:var(--neon-green);"></i> Sarjana Sistem Informasi · Universitas Pamulang</li>
+                <li><i class="fas fa-shield-alt" style="color:var(--neon-cyan);"></i> Anzen Leader Safety Training · PT AHM</li>
+                <li><i class="fas fa-chart-pie" style="color:var(--neon-cyan);"></i> Data Analytics Certificate · Dicoding</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="grid-4" style="margin-top:1.5rem;">
+          <div class="holo-card" data-aos="zoom-in" style="text-align:center;"><div class="stat-counter" data-target="6">0</div><p style="color:#9893b8; font-size:0.75rem;">Tahun</p></div>
+          <div class="holo-card" data-aos="zoom-in" data-aos-delay="100" style="text-align:center;"><div class="stat-counter" data-target="3">0</div><p style="color:#9893b8; font-size:0.75rem;">Perusahaan</p></div>
+          <div class="holo-card" data-aos="zoom-in" data-aos-delay="200" style="text-align:center;"><div class="stat-counter" data-target="15">0</div><p style="color:#9893b8; font-size:0.75rem;">Proyek</p></div>
+          <div class="holo-card" data-aos="zoom-in" data-aos-delay="300" style="text-align:center;"><div class="stat-counter" data-target="2">0</div><p style="color:#9893b8; font-size:0.75rem;">Sertifikasi</p></div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section id="experience" class="section">
+        <p class="section-label" data-aos="fade-up">// Career Path</p>
+        <h2 class="section-title" data-aos="fade-up">Work <span>Timeline</span></h2>
+        <div class="timeline-glow">
+          <div class="tl-item" data-aos="fade-right"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Apr 2025 — Sekarang</p><h3 style="color:#fff; font-size:1rem;">Supervisor · Fullmoon Jaya Abadi</h3><p style="color:#9893b8; font-size:0.8rem;">Memimpin operasional gudang harian, akurasi stok, kepatuhan safety.</p></div>
+          <div class="tl-item" data-aos="fade-right" data-aos-delay="100"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Jul 2024 — Apr 2025</p><h3 style="color:#fff; font-size:1rem;">Quality Controller & Staff Admin · Fullmoon Jaya Abadi</h3><p style="color:#9893b8; font-size:0.8rem;">Inspeksi kualitas B2B, laporan QC, penanganan barang reject.</p></div>
+          <div class="tl-item" data-aos="fade-right" data-aos-delay="200"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Agt 2023 — Jul 2024</p><h3 style="color:#fff; font-size:1rem;">Admin Staff & Quality Control · Kimbratas</h3><p style="color:#9893b8; font-size:0.8rem;">Kepala QC, standar K3, input data produksi harian.</p></div>
+          <div class="tl-item" data-aos="fade-right" data-aos-delay="300"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Okt 2019 — Agt 2023</p><h3 style="color:#fff; font-size:1rem;">HR & GA Staff · Kimbratas</h3><p style="color:#9893b8; font-size:0.8rem;">Administrasi SDM, pelatihan, backup QC.</p></div>
+          <div class="tl-item" data-aos="fade-right" data-aos-delay="400"><p style="color:var(--neon-cyan); font-size:0.7rem; font-weight:600;">Jan 2018 — Jan 2019</p><h3 style="color:#fff; font-size:1rem;">Warehouse Staff · PT Nikko Cahya Electric</h3><p style="color:#9893b8; font-size:0.8rem;">Penerimaan/pengeluaran barang, inventory tracking.</p></div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects" class="section">
+        <p class="section-label" data-aos="fade-up">// Projects</p>
+        <h2 class="section-title" data-aos="fade-up">Featured <span>Projects</span></h2>
+        <div class="grid-3">
+          <div class="holo-card" data-aos="flip-left">
+            <div class="icon-box icon-cyan"><i class="fas fa-robot"></i></div>
+            <h3 style="color:#fff; margin-bottom:0.8rem; font-size:1.1rem;">WMS Implementation</h3>
+            <p style="color:#9893b8; font-size:0.85rem;">Implementasi sistem manajemen gudang dengan akurasi 99.8% dan pengurangan waktu proses 40%.</p>
+            <div class="tag-wrap"><span class="tag">SAP EWM</span><span class="tag">Automation</span><span class="tag">RFID</span></div>
+          </div>
+          <div class="holo-card" data-aos="flip-left" data-aos-delay="100">
+            <div class="icon-box icon-purple"><i class="fas fa-chart-line"></i></div>
+            <h3 style="color:#fff; margin-bottom:0.8rem; font-size:1.1rem;">Inventory Optimization</h3>
+            <p style="color:#9893b8; font-size:0.85rem;">Mengurangi selisih stok dari 5% menjadi 0.2% melalui sistem real-time monitoring.</p>
+            <div class="tag-wrap"><span class="tag">Data Analytics</span><span class="tag">Power BI</span><span class="tag">SQL</span></div>
+          </div>
+          <div class="holo-card" data-aos="flip-left" data-aos-delay="200">
+            <div class="icon-box icon-pink"><i class="fas fa-truck"></i></div>
+            <h3 style="color:#fff; margin-bottom:0.8rem; font-size:1.1rem;">Logistics Automation</h3>
+            <p style="color:#9893b8; font-size:0.85rem;">Otomatisasi proses inbound/outbound menghemat 70% waktu dan mengurangi kesalahan.</p>
+            <div class="tag-wrap"><span class="tag">RPA</span><span class="tag">IoT</span><span class="tag">API</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills" class="section">
+        <p class="section-label" data-aos="fade-up">// Core Competencies</p>
+        <h2 class="section-title" data-aos="fade-up">Technical <span>Skills</span></h2>
+        <div class="grid-3">
+          <div class="holo-card" data-aos="zoom-in"><div class="icon-box icon-green"><i class="fas fa-warehouse"></i></div><h3 style="color:#fff; margin-bottom:0.8rem; font-size:1rem;">Warehouse & Logistik</h3><div class="tag-wrap"><span class="tag">Manajemen Gudang</span><span class="tag">Inventory Disposal</span><span class="tag">Administrasi Gudang</span><span class="tag">Pengawasan Logistik</span><span class="tag">Supply Chain</span></div></div>
+          <div class="holo-card" data-aos="zoom-in" data-aos-delay="100"><div class="icon-box icon-cyan"><i class="fas fa-laptop-code"></i></div><h3 style="color:#fff; margin-bottom:0.8rem; font-size:1rem;">Teknis & IT</h3><div class="tag-wrap"><span class="tag">Microsoft Excel</span><span class="tag">PowerPoint</span><span class="tag">Data Analytics</span><span class="tag">Web Developer</span><span class="tag">Teknis Data</span></div></div>
+          <div class="holo-card" data-aos="zoom-in" data-aos-delay="200"><div class="icon-box icon-pink"><i class="fas fa-users-cog"></i></div><h3 style="color:#fff; margin-bottom:0.8rem; font-size:1rem;">Manajerial & QC</h3><div class="tag-wrap"><span class="tag">Kepemimpinan</span><span class="tag">Sistem SDM</span><span class="tag">Quality Control</span><span class="tag">K3 / Safety</span><span class="tag">Support Services</span></div></div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS - SWIPER SLIDER -->
+      <section id="testimonials" class="section">
+        <p class="section-label" data-aos="fade-up">// Testimonials</p>
+        <h2 class="section-title" data-aos="fade-up">What People <span>Say</span></h2>
+        <div class="swiper" data-aos="fade-up">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="holo-card">
+                <i class="fas fa-quote-left" style="color:var(--neon-cyan); font-size:2rem;"></i>
+                <p style="color:#9893b8; font-size:0.9rem; margin:1rem 0;">"Aldo adalah supervisor yang sangat detail dan bertanggung jawab. Dia berhasil meningkatkan akurasi stok kami dari 92% menjadi 99.8% dalam 3 bulan."</p>
+                <strong style="color:#fff;">Budi Santoso</strong>
+                <p style="color:#9893b8; font-size:0.8rem;">Operations Manager · Fullmoon Jaya Abadi</p>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="holo-card">
+                <i class="fas fa-quote-left" style="color:var(--neon-purple); font-size:2rem;"></i>
+                <p style="color:#9893b8; font-size:0.9rem; margin:1rem 0;">"Kemampuan Aldo dalam mengelola tim dan sistem WMS sangat luar biasa. Dia adalah aset berharga bagi perusahaan kami."</p>
+                <strong style="color:#fff;">Siti Rahma</strong>
+                <p style="color:#9893b8; font-size:0.8rem;">HR Manager · Kimbratas</p>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="holo-card">
+                <i class="fas fa-quote-left" style="color:var(--neon-green); font-size:2rem;"></i>
+                <p style="color:#9893b8; font-size:0.9rem; margin:1rem 0;">"Aldo sangat cepat dalam mengidentifikasi masalah dan memberikan solusi. Dedikasinya terhadap pekerjaan patut diapresiasi."</p>
+                <strong style="color:#fff;">Andi Wijaya</strong>
+                <p style="color:#9893b8; font-size:0.8rem;">Supply Chain Director · PT Nikko Cahya Electric</p>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="holo-card">
+                <i class="fas fa-quote-left" style="color:var(--neon-pink); font-size:2rem;"></i>
+                <p style="color:#9893b8; font-size:0.9rem; margin:1rem 0;">"Profesionalisme dan pengetahuan Aldo tentang WMS sangat membantu perusahaan kami dalam proses digitalisasi gudang."</p>
+                <strong style="color:#fff;">Rina Kusuma</strong>
+                <p style="color:#9893b8; font-size:0.8rem;">Project Manager · Fullmoon Jaya Abadi</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="section">
+        <p class="section-label" data-aos="fade-up">// Contact</p>
+        <h2 class="section-title" data-aos="fade-up">Get In <span>Touch</span></h2>
+        <div class="holo-card" data-aos="fade-up" style="max-width:600px; margin:0 auto;">
+          <div class="icon-box icon-whatsapp" style="margin:0 auto 1rem;"><i class="fab fa-whatsapp"></i></div>
+          <h3 style="color:#fff; text-align:center; margin-bottom:0.5rem;">Kirim Pesan via WhatsApp</h3>
+          <p style="color:#9893b8; text-align:center; font-size:0.85rem; margin-bottom:1.5rem;">Isi form di bawah, pesan akan langsung terkirim ke WhatsApp saya.</p>
+          
+          <form class="contact-form" id="whatsappForm">
+            <input type="text" id="nama" placeholder="Nama Lengkap Anda" required>
+            <input type="text" id="perusahaan" placeholder="Perusahaan / Instansi (Opsional)">
+            <input type="email" id="email" placeholder="Email Anda" required>
+            <select id="subjek" required>
+              <option value="" disabled selected>Pilih Subjek</option>
+              <option value="Lowongan Kerja">Lowongan Kerja</option>
+              <option value="Konsultasi WMS">Konsultasi WMS</option>
+              <option value="Kerjasama Proyek">Kerjasama Proyek</option>
+              <option value="Training / Workshop">Training / Workshop</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+            <textarea id="pesan" placeholder="Tulis pesan Anda..." rows="4" required></textarea>
+            <button type="submit" class="btn btn-whatsapp" style="width:100%; justify-content:center; font-size:1rem;">
+              <i class="fab fa-whatsapp"></i> Kirim via WhatsApp
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- DOWNLOAD -->
+      <section id="download" class="section" style="text-align:center;">
+        <div class="holo-card" data-aos="zoom-in" style="max-width:600px; margin:0 auto; padding:2rem;">
+          <i class="fas fa-cloud-download-alt" style="font-size:2.5rem; color:var(--neon-cyan); margin-bottom:1rem;"></i>
+          <h3 style="color:#fff; margin-bottom:0.8rem; font-family:'Space Grotesk',sans-serif; font-size:1.2rem;">Download Curriculum Vitae</h3>
+          <p style="color:#9893b8; margin-bottom:1.5rem; font-size:0.85rem;">CV profesional siap diunduh dalam format PDF dari Google Drive.</p>
+          <a href="https://drive.google.com/file/d/1BLqylNuaguArKiVQEg7rpTfZiFAR673B/view?usp=sharing" class="btn btn-primary" style="font-size:0.9rem; padding:0.8rem 2rem; text-decoration:none;" target="_blank" rel="noopener noreferrer" download>
+            <i class="fas fa-download"></i> Download CV (PDF)
+          </a>
+        </div>
+      </section>
+
+      <footer>
+        <p>©Powered by AL | <i class="fas fa-envelope"></i> aldogiyantoro28@gmail.com | <i class="fab fa-whatsapp"></i> +62 896-7778-6762</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  
   <script>
-    // LIQUID NAVIGATION
-    const liquidNavItems = document.querySelectorAll('.liquid-nav-item');
-    liquidNavItems.forEach(item => {
-      item.addEventListener('click', function(e) {
-        liquidNavItems.forEach(nav => nav.classList.remove('active'));
-        this.classList.add('active');
-        const ripple = document.createElement('span');
-        ripple.classList.add('ripple');
-        const rect = this.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
-        ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
-        this.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 500);
-      });
-      item.addEventListener('mouseenter', function() {
-        const rect = this.getBoundingClientRect();
-        for (let i = 0; i < 4; i++) {
-          const bubble = document.createElement('div');
-          bubble.classList.add('bubble');
-          const size = Math.random() * 10 + 5;
-          bubble.style.width = size + 'px';
-          bubble.style.height = size + 'px';
-          bubble.style.left = (Math.random() * rect.width) + 'px';
-          bubble.style.top = rect.height + 'px';
-          bubble.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
-          bubble.style.animationDelay = (Math.random() * 0.5) + 's';
-          this.appendChild(bubble);
-          setTimeout(() => bubble.remove(), 3000);
-        }
-      });
+    // ============================================
+    // WELCOME SCREEN
+    // ============================================
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const mainContent = document.getElementById('mainContent');
+    const loadingFill = document.getElementById('loadingFill');
+    const welcomePercentage = document.getElementById('welcomePercentage');
+    const welcomeParticles = document.getElementById('welcomeParticles');
+
+    for (let i = 0; i < 30; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('welcome-particle');
+      const size = Math.random() * 4 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      particle.style.animationDelay = (Math.random() * 2) + 's';
+      particle.style.background = `rgba(${Math.random() > 0.5 ? '0,240,255' : '180,77,255'}, 0.6)`;
+      welcomeParticles.appendChild(particle);
+    }
+
+    let progress = 0;
+    const loadingInterval = setInterval(() => {
+      progress += Math.random() * 5 + 2;
+      if (progress > 100) progress = 100;
+      loadingFill.style.width = progress + '%';
+      welcomePercentage.textContent = Math.floor(progress) + '%';
+      
+      if (progress >= 100) {
+        clearInterval(loadingInterval);
+        setTimeout(() => {
+          welcomeScreen.classList.add('hidden');
+          mainContent.classList.add('visible');
+          document.body.style.overflow = 'auto';
+          AOS.init();
+        }, 500);
+      }
+    }, 100);
+    document.body.style.overflow = 'hidden';
+
+    // ============================================
+    // SWIPER TESTIMONIALS
+    // ============================================
+    const swiper = new Swiper('.swiper', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      loop: true,
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        640: { slidesPerView: 1 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 2 },
+      }
     });
 
-    // WHATSAPP FORM
+    // ============================================
+    // WHATSAPP FORM with SweetAlert2
+    // ============================================
     document.getElementById('whatsappForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -1124,20 +1222,37 @@
       const text = `*Halo Aldo!*%0A%0A*Nama:* ${nama}%0A*Perusahaan:* ${perusahaan}%0A*Email:* ${email}%0A*Subjek:* ${subjek}%0A%0A*Pesan:*%0A${pesan}`;
       const waLink = `https://wa.me/6289677786762?text=${text}`;
       
-      // Tampilkan notifikasi
-      const notification = document.getElementById('notification');
-      notification.textContent = '✅ Membuka WhatsApp...';
-      notification.classList.add('show');
-      setTimeout(() => notification.classList.remove('show'), 2000);
-      
-      // Buka WhatsApp di tab baru
-      window.open(waLink, '_blank');
-      
-      // Reset form
-      this.reset();
+      Swal.fire({
+        title: 'Buka WhatsApp?',
+        text: `Pesan akan dikirim ke WhatsApp Aldo (${nama})`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Buka!',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#25D366',
+        cancelButtonColor: '#6b6580',
+        background: '#1a1525',
+        color: '#fff',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open(waLink, '_blank');
+          Swal.fire({
+            title: 'Berhasil!',
+            text: 'WhatsApp sedang dibuka...',
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false,
+            background: '#1a1525',
+            color: '#fff',
+          });
+          this.reset();
+        }
+      });
     });
 
+    // ============================================
     // CUSTOM CURSOR
+    // ============================================
     const cursor = document.querySelector('.cursor');
     const cursorDot = document.querySelector('.cursor-dot');
     document.addEventListener('mousemove', (e) => {
@@ -1151,7 +1266,9 @@
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
 
+    // ============================================
     // PARTICLE NETWORK
+    // ============================================
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
     let w, h, particles = [];
@@ -1174,7 +1291,9 @@
     }
     animateParticles();
 
+    // ============================================
     // 3D PHOTO TILT
+    // ============================================
     const photoWrapper = document.getElementById('photoWrapper');
     if (window.innerWidth >= 768) {
       document.addEventListener('mousemove', (e) => {
@@ -1190,7 +1309,9 @@
       });
     }
 
+    // ============================================
     // TYPING EFFECT
+    // ============================================
     const typingEl = document.getElementById('typing');
     const phrases = ['Streamlining Operations.', 'Process Automation.', 'Data-Driven Logistics.', 'Quality Assurance.'];
     let phraseIdx=0, charIdx=0, isDeleting=false;
@@ -1201,9 +1322,11 @@
       else if(isDeleting && charIdx>0) { charIdx--; setTimeout(type, 40); }
       else { isDeleting=!isDeleting; if(!isDeleting) phraseIdx=(phraseIdx+1)%phrases.length; setTimeout(type, 1200); }
     }
-    type();
+    setTimeout(type, 3000);
 
+    // ============================================
     // COUNTER ANIMATION
+    // ============================================
     const counters = document.querySelectorAll('.stat-counter');
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -1220,7 +1343,9 @@
     }, {threshold:0.5});
     counters.forEach(c => counterObserver.observe(c));
 
+    // ============================================
     // SMOOTH SCROLL
+    // ============================================
     document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});}));
   </script>
 </body>
